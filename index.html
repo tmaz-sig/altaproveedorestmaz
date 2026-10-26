@@ -32,7 +32,7 @@
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45;margin:0}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--green)}
-.wrap{max-width:920px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1140px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 
 .top{background:var(--green);color:var(--on-green)}
 .top .wrap{display:flex;align-items:center;gap:16px;padding-block:14px}
@@ -42,18 +42,44 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .top .code{font-size:.82rem;opacity:.9;letter-spacing:.04em;margin-top:2px}
 .top .tt{min-width:0}
 
-.steps{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
-.steps .wrap{display:flex;gap:4px;overflow-x:auto;padding-block:8px;scrollbar-width:none}
-.steps button{flex:1 0 auto;display:flex;align-items:center;gap:8px;border:0;background:transparent;color:var(--muted);font:600 .9rem var(--body);padding:8px 10px;border-radius:8px;cursor:pointer;white-space:nowrap}
-.steps button .n{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;border:1.5px solid var(--line);font-size:.8rem;font-variant-numeric:tabular-nums;flex:none}
+.layout{display:grid;grid-template-columns:232px minmax(0,1fr);gap:28px;align-items:start;max-width:1140px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);margin-top:20px;display:grid;gap:12px;z-index:5}
+.steps{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px;display:grid;gap:2px}
+.steps .cap{font:600 .78rem var(--display);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:6px 10px 4px}
+.steps button{display:grid;grid-template-columns:26px minmax(0,1fr);column-gap:10px;align-items:center;text-align:left;border:0;background:transparent;color:var(--muted);font:600 .95rem var(--body);padding:9px 10px;border-radius:8px;cursor:pointer}
+.steps button:hover{background:var(--bg)}
+.steps button .n{grid-row:span 2;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;border:1.5px solid var(--line);font-size:.8rem;font-variant-numeric:tabular-nums}
+.steps button .st{font-weight:400;font-size:.78rem;color:var(--muted)}
 .steps button[aria-current="step"]{color:var(--ink);background:var(--soft)}
 .steps button[aria-current="step"] .n{background:var(--green);border-color:var(--green);color:var(--on-green)}
 .steps button.done .n{border-color:var(--ok);color:var(--ok)}
+.steps button.done .st{color:var(--ok)}
 .steps button.bad .n{border-color:var(--err);color:var(--err)}
+.steps button.bad .st{color:var(--err)}
 .steps button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
-@media (max-width:640px){.steps button .lbl{display:none}.steps button[aria-current="step"] .lbl{display:inline}}
-
-main{padding-block:20px 120px}
+.clear{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;display:grid;gap:8px;font-size:.88rem}
+.clear .btn{width:100%}
+.clear .row{display:flex;gap:6px}
+.clear .row .btn{flex:1}
+.clear .short{display:none}
+.btn.danger{border-color:var(--err);color:var(--err)}
+.btn.danger.fill{background:var(--err);color:#fff}
+@media (max-width:820px){
+  .layout{display:block}
+  .side{position:sticky;top:env(safe-area-inset-top,0px);margin:0 calc(-1*max(16px,env(safe-area-inset-left,0px))) ;padding:8px max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px));background:var(--surface);border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px}
+  .steps{display:flex;border:0;padding:0;overflow-x:auto;scrollbar-width:none;background:transparent}
+  .steps .cap,.steps button .st{display:none}
+  .steps button{display:flex;gap:8px;padding:7px 8px;white-space:nowrap;flex:none}
+  .steps button .lbl{display:none}
+  .steps button[aria-current="step"] .lbl{display:inline}
+  .clear{border:0;padding:0;background:transparent}
+  .clear .btn{width:auto}
+  .clear .hint{display:none}
+  .clear .long{display:none}.clear .short{display:inline}
+  .clear.ask{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+  .clear.ask .row{flex:1}
+}
+main{padding-block:20px 120px;min-width:0}
 .step{display:grid;gap:16px}
 .step h2{font-family:var(--display);font-size:1.4rem;margin:0;font-weight:700;text-wrap:balance}
 .lead{margin:-8px 0 0;color:var(--muted);max-width:62ch}
@@ -63,7 +89,7 @@ main{padding-block:20px 120px}
 .grid .full{grid-column:1/-1}
 .grid.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media (max-width:620px){.grid,.grid.g3{grid-template-columns:minmax(0,1fr)}}
-.f{display:grid;gap:4px;min-width:0}
+.f{display:grid;gap:4px;min-width:0;align-content:start}
 .f label{font-weight:600;font-size:.9rem}
 .f label .opt{font-weight:400;color:var(--muted);font-size:.82rem}
 .f input,.f select{width:100%;font:inherit;font-size:1rem;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:8px;padding:10px 12px;min-height:44px}
@@ -155,9 +181,13 @@ main{padding-block:20px 120px}
   </div>
 </header>
 
-<nav class="steps" aria-label="Pasos del registro"><div class="wrap" id="stepnav"></div></nav>
+<div class="layout">
+<aside class="side">
+  <nav class="steps" aria-label="Pasos del registro" id="stepnav"></nav>
+  <div class="clear" id="clearBox"></div>
+</aside>
 
-<main class="wrap">
+<main>
   <form id="frm" novalidate autocomplete="on">
 
   <!-- PASO 1 -->
@@ -308,13 +338,11 @@ main{padding-block:20px 120px}
       <div id="dlMsg"></div>
       <div class="alert ok" style="font-size:.9rem">Envía el PDF firmado y tus documentos al contacto de Compras que te compartió este formato.</div>
     </div>
-    <div class="confirm" id="resetBox">
-      <button type="button" class="btn small ghost" id="resetBtn">Borrar todo y empezar de nuevo</button>
-    </div>
   </section>
   </form>
   <p class="foot">Copia no controlada si se imprime o descarga. Consulte la versión vigente en el repositorio oficial del SIG de TMAZ.</p>
 </main>
+</div>
 
 <div class="bar"><div class="wrap">
   <button type="button" class="btn" id="prev">Atrás</button>
@@ -405,7 +433,9 @@ let cur=1;
 const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
 function load(){try{const r=localStorage.getItem(KEY);if(r){const o=JSON.parse(r);S=Object.assign(S,o);S.v=o.v||{};S.docs=o.docs||{};}}catch(e){}}
 let saveT;
-function save(){clearTimeout(saveT);saveT=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify(S));$("#saved").textContent="Avance guardado en este dispositivo";}catch(e){$("#saved").textContent="";}},300)}
+function flush(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+window.addEventListener("pagehide",()=>{if(saveT){clearTimeout(saveT);flush();}});
+function save(){clearTimeout(saveT);saveT=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify(S));$("#saved").textContent="Avance guardado en este dispositivo";}catch(e){$("#saved").textContent="";}saveT=0;},300)}
 
 /* ===== Construir campos ===== */
 function buildField(host){
@@ -475,13 +505,14 @@ function docState(d){ if(d.fixed)return "adj"; if(d.fis&&S.persona==="fisica")re
 
 /* ===== Navegación ===== */
 function buildNav(){
-  $("#stepnav").innerHTML=STEPS.map(s=>`<button type="button" data-go="${s.n}"><span class="n">${s.n}</span><span class="lbl">${s.l}</span></button>`).join("");
+  $("#stepnav").innerHTML='<div class="cap">Pasos</div>'+STEPS.map(s=>`<button type="button" data-go="${s.n}"><span class="n">${s.n}</span><span class="lbl">${s.l}</span><span class="st"></span></button>`).join("");
   $$("[data-go]").forEach(b=>b.addEventListener("click",()=>go(+b.dataset.go)));
 }
 function paintNav(){
   $$("[data-go]").forEach(b=>{const n=+b.dataset.go;b.toggleAttribute("aria-current",n===cur);if(n===cur)b.setAttribute("aria-current","step");
     const visited=(S.visited||[]).includes(n); const errs=visited&&n!==cur?stepErrors(n,false).length:0;
-    b.classList.toggle("bad",errs>0); b.classList.toggle("done",visited&&n!==cur&&errs===0);});
+    b.classList.toggle("bad",errs>0); b.classList.toggle("done",visited&&n!==cur&&errs===0);
+    b.querySelector(".st").textContent=n===cur?"En curso":(errs>0?(errs===1?"Falta 1 dato":"Faltan "+errs+" datos"):(visited?"Completo":"Pendiente"));});
   $("#prev").disabled=cur===1;
   $("#next").textContent=cur===5?"Descargar PDF":"Siguiente";
 }
@@ -767,18 +798,38 @@ async function download(kind){
   let r;
   if(kind==="pdf") r=await saveFile(fname("pdf"),buildPdf(cs,DOC.codigo+" "+(val("razon")||"")));
   else { for(let i=0;i<cs.length;i++){const b=await new Promise(res=>cs[i].toBlob(res,"image/png"));r=await saveFile(fname("png").replace(".png",` (pág ${i+1}).png`),b);if(r!=="ok")break;} }
-  msg.innerHTML=r==="ok"?'<div class="alert ok">Listo. Revisa tus descargas.</div>':(r==="declined"?'<div class="alert warn">Se canceló la descarga.</div>':'<div class="alert err">No se pudo descargar en esta vista.</div>');
+  msg.innerHTML=r==="ok"?'<div class="alert ok">Listo. Revisa tus descargas.<div><button type="button" class="btn small" id="another">Llenar otro proveedor</button></div></div>':(r==="declined"?'<div class="alert warn">Se canceló la descarga.</div>':'<div class="alert err">No se pudo descargar en esta vista.</div>');
 }
 $("#dlPdf").addEventListener("click",()=>download("pdf"));
+$("#dlMsg").addEventListener("click",e=>{if(e.target.id==="another"){askClear();$("#clearBox").scrollIntoView({block:"center"});}});
 $("#dlPng").addEventListener("click",()=>download("png"));
 
 /* reinicio con confirmación en la página */
-function askReset(){
-  $("#resetBox").innerHTML='<span>¿Borrar todos los datos y firmas de este dispositivo?</span><button type="button" class="btn small" id="rsYes" style="border-color:var(--err);color:var(--err)">Sí, borrar</button><button type="button" class="btn small ghost" id="rsNo">Cancelar</button>';
-  $("#rsYes").onclick=()=>{try{localStorage.removeItem(KEY);}catch(e){} S={v:{},docs:{},cert:"",persona:"moral",rep2:false,ext:false,decl:false,priv:false,sig1:"",sig2:""}; location.reload();};
-  $("#rsNo").onclick=()=>{$("#resetBox").innerHTML='<button type="button" class="btn small ghost" id="resetBtn">Borrar todo y empezar de nuevo</button>';$("#resetBtn").addEventListener("click",askReset);};
+function clearIdle(){
+  $("#clearBox").classList.remove("ask");
+  $("#clearBox").innerHTML='<button type="button" class="btn small" id="clearBtn"><span class="long">Limpiar formulario</span><span class="short">Limpiar</span></button><span class="hint" style="color:var(--muted)">Borra los datos y firmas para llenar otro proveedor.</span>';
+  $("#clearBtn").addEventListener("click",askClear);
 }
-$("#resetBtn").addEventListener("click",askReset);
+function askClear(){
+  $("#clearBox").classList.add("ask");$("#clearBox").innerHTML='<b>¿Borrar todos los datos y firmas?</b><span class="hint" style="color:var(--muted)">Descarga antes el PDF si aún no lo haces.</span><div class="row"><button type="button" class="btn small danger fill" id="clYes">Sí, limpiar</button><button type="button" class="btn small" id="clNo">Cancelar</button></div>';
+  $("#clYes").onclick=doClear; $("#clNo").onclick=clearIdle; $("#clYes").focus();
+}
+function doClear(){
+  clearTimeout(saveT); saveT=0; try{localStorage.removeItem(KEY);}catch(e){}
+  S={v:{},docs:{},cert:"",persona:"moral",rep2:false,ext:false,decl:false,priv:false,sig1:"",sig2:"",visited:[]};
+  Object.keys(F).forEach(k=>{if(F[k].def)S.v[k]=F[k].def;});
+  const d=new Date(); S.v.fecha=new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
+  Object.keys(F).forEach(k=>{const el=$("#"+k); if(el)el.value=S.v[k]||""; const w=$("#w_"+k); if(w){w.classList.remove("invalid","valid");}});
+  $("#cert").value=""; $$('input[name="persona"]').forEach(r=>r.checked=r.value==="moral");
+  $("#hasRep2").checked=false; $("#hasExt").checked=false; rep2(); extT();
+  $("#decl").checked=false; $("#priv").checked=false; upd();
+  $("#dlMsg").innerHTML=""; $("#preview").innerHTML="";
+  [1,2].forEach(i=>{const {c,ctx}=pads[i]; ctx.clearRect(0,0,c.width,c.height);});
+  paintDocs(); clearIdle(); cur=1; $$(".step").forEach(s=>s.hidden=+s.dataset.step!==1); paintNav(); window.scrollTo({top:0});
+  $("#saved").textContent="Formulario limpio. Listo para otro proveedor.";
+  setTimeout(()=>$("#razon").focus(),50);
+}
+clearIdle();
 
 /* ===== Inicio ===== */
 load();
